@@ -1,7 +1,7 @@
 # 📋 User Service — Day-Wise Implementation Plan
 
 > **Goal:** Build the identity and authentication layer for the Online Voting System.  
-> **Status:** ✅ Day 7 — Completed (Database Layer)
+> **Status:** ✅ Day 8 — Completed (DTOs & Exception Handling)
 
 ---
 
@@ -23,10 +23,10 @@
 - [x] 7.4 — Verify DB connection (Manual verification via startup logs)
 
 ## 📅 Day 8: DTOs & Exception Handling
-- [ ] 8.1 — Create `dto/RegisterRequest.java` & `dto/UserResponseDTO.java`
-- [ ] 8.2 — Create `dto/ApiResponse.java` (Generic wrapper)
-- [ ] 8.3 — Implement `exception/ResourceNotFoundException.java` & `DuplicateResourceException.java`
-- [ ] 8.4 — Create `exception/GlobalExceptionHandler.java` (@RestControllerAdvice)
+- [x] 8.1 — Create `dto/RegisterRequest.java` & `dto/UserResponseDTO.java`
+- [x] 8.2 — Create `dto/ApiResponse.java` (Generic wrapper)
+- [x] 8.3 — Implement `exception/ResourceNotFoundException.java` & `DuplicateResourceException.java`
+- [x] 8.4 — Create `exception/GlobalExceptionHandler.java` (@RestControllerAdvice)
 
 ## 📅 Day 9: User Registration Logic
 - [ ] 9.1 — Create `mapper/UserMapper.java`
