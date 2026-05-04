@@ -171,7 +171,7 @@ user-service/
 
 ## 📋 Implementation Progress
 
-> Detailed checklist: [IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)
+> Detailed checklist: [IMPLEMENTATION_PLAN.md](src/main/java/com/voting/userservice/docs/IMPLEMENTATION_PLAN.md)
 
 | Step | Description | Status |
 |------|-------------|--------|

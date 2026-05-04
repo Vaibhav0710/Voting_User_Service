@@ -1,7 +1,7 @@
 # 📋 User Service — Day-Wise Implementation Plan
 
 > **Goal:** Build the identity and authentication layer for the Online Voting System.  
-> **Status:** ✅ Day 8 — Completed (DTOs & Exception Handling)
+> **Status:** ✅ Day 10 — Completed (JWT Foundation)
 
 ---
 
@@ -29,16 +29,17 @@
 - [x] 8.4 — Create `exception/GlobalExceptionHandler.java` (@RestControllerAdvice)
 
 ## 📅 Day 9: User Registration Logic
-- [ ] 9.1 — Create `mapper/UserMapper.java`
-- [ ] 9.2 — Define `IUserService.java` interface
-- [ ] 9.3 — Implement `registerUser()` in `UserServiceImpl.java` (with BCrypt password hashing)
-- [ ] 9.4 — Implement registration validation (check for existing email/username)
+- [x] 9.1 — Create `mapper/UserMapper.java`
+- [x] 9.2 — Define `IUserService.java` interface
+- [x] 9.3 — Implement `registerUser()` in `UserServiceImpl.java` (with BCrypt password hashing)
+- [x] 9.4 — Implement registration validation (check for existing email/username)
+- [x] 9.5 — Create `config/SecurityConfig.java` (temporary — BCryptPasswordEncoder bean + permitAll)
 
 ## 📅 Day 10: JWT Utility & Foundation
-- [ ] 10.1 — Add `jjwt-api`, `jjwt-impl`, `jjwt-jackson` dependencies to `pom.xml`
-- [ ] 10.2 — Create `security/JwtService.java`
-- [ ] 10.3 — Implement `generateToken()`, `extractUsername()`, and `isTokenValid()`
-- [ ] 10.4 — Secure secret keys via `application.yml` placeholders
+- [x] 10.1 — Add `jjwt-api`, `jjwt-impl`, `jjwt-jackson` dependencies to `pom.xml`
+- [x] 10.2 — Create `security/JwtService.java`
+- [x] 10.3 — Implement `generateToken()`, `extractUsername()`, and `isTokenValid()`
+- [x] 10.4 — Secure secret keys via `application.yml` placeholders
 
 ## 📅 Day 11: Spring Security Configuration
 - [ ] 11.1 — Implement `security/CustomUserDetailsService.java`
