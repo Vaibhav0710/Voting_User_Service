@@ -16,12 +16,13 @@
 The **User Service** is the central identity provider for the voting system. It handles user registration, authentication via JWT tokens, and manages roles (`ROLE_VOTER`, `ROLE_ADMIN`). It ensures that only registered voters can cast votes and only authorized admins can manage candidates.
 
 ### Feature Status
-- 🟡 Project bootstrapping (Day 6 Complete)
-- 🔜 User registration with BCrypt hashing
-- 🔜 JWT token generation and validation
-- 🔜 Role-based Access Control (RBAC)
+- ✅ Project bootstrapping
+- ✅ User registration with BCrypt hashing
+- ✅ JWT token generation and validation
+- ✅ Role-based Access Control (RBAC) foundation
+- ✅ Global Exception Handling
+- 🔜 Login API & Auth Controller
 - 🔜 Token validation endpoint for API Gateway
-- 🔜 Global Exception Handling
 - 🔜 Swagger/OpenAPI documentation
 - 🔜 Unit + Integration tests
 
@@ -176,12 +177,12 @@ user-service/
 | Step | Description | Status |
 |------|-------------|--------|
 | 6 | Project Bootstrapping | ✅ Done |
-| 7 | Database Layer (User Entity, Repository) | 🔜 Next |
-| 8 | DTOs & Exception Handling | 🔜 Planned |
-| 9 | User Registration Logic | 🔜 Planned |
-| 10 | JWT Foundation | 🔜 Planned |
-| 11 | Spring Security Configuration | 🔜 Planned |
-| 12 | Authentication APIs (Login) | 🔜 Planned |
+| 7 | Database Layer (User Entity, Repository) | ✅ Done |
+| 8 | DTOs & Exception Handling | ✅ Done |
+| 9 | User Registration Logic | ✅ Done |
+| 10 | JWT Foundation | ✅ Done |
+| 11 | Spring Security Configuration | ✅ Done |
+| 12 | Authentication APIs (Login) | 🔜 Next |
 | 13 | Token Validation & Internal Endpoints | 🔜 Planned |
 | 14 | Unit Testing | 🔜 Planned |
 | 15 | Integration Testing | 🔜 Planned |
@@ -206,4 +207,4 @@ This project is licensed under the MIT License.
 ---
 
 > **Maintainer:** Vaibhav Jain  
-> **Last Updated:** April 24, 2026
+> **Last Updated:** May 4, 2026

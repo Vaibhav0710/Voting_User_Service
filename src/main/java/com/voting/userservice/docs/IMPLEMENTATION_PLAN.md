@@ -42,9 +42,9 @@
 - [x] 10.4 — Secure secret keys via `application.yml` placeholders
 
 ## 📅 Day 11: Spring Security Configuration
-- [ ] 11.1 — Implement `security/CustomUserDetailsService.java`
-- [ ] 11.2 — Create `security/JwtAuthenticationFilter.java`
-- [ ] 11.3 — Configure `security/SecurityConfig.java`:
+- [x] 11.1 — Implement `security/CustomUserDetailsService.java`
+- [x] 11.2 — Create `security/JwtAuthenticationFilter.java`
+- [x] 11.3 — Configure `security/SecurityConfig.java`:
     - Disable CSRF
     - Set session policy to STATELESS
     - Configure PasswordEncoder bean
