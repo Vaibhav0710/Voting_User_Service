@@ -2,12 +2,18 @@ package com.voting.userservice.service;
 
 import com.voting.userservice.dto.RegisterRequest;
 import com.voting.userservice.dto.UserResponseDTO;
+import com.voting.userservice.dto.LoginRequest;
+import com.voting.userservice.dto.AuthResponse;
 import com.voting.userservice.exception.DuplicateResourceException;
+import com.voting.userservice.exception.ResourceNotFoundException;
 import com.voting.userservice.mapper.UserMapper;
 import com.voting.userservice.model.User;
 import com.voting.userservice.repository.UserRepository;
+import com.voting.userservice.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +33,8 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     /**
      * Registers a new user with the following guarantees:
@@ -64,6 +72,36 @@ public class UserServiceImpl implements IUserService {
 
         // --- Step 5: Map Entity → Response DTO (password excluded) ---
         return userMapper.toResponseDTO(savedUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsernameOrEmail(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository
+                .findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        String token = jwtService.generateToken(
+                user.getUsername(),
+                user.getId(),
+                user.getRole().name()
+        );
+
+        log.info("User authenticated successfully: username={}, id={}", user.getUsername(), user.getId());
+
+        return AuthResponse.builder()
+                .token(token)
+                .tokenType("Bearer")
+                .username(user.getUsername())
+                .role(user.getRole().name())
+                .build();
     }
 
     /**

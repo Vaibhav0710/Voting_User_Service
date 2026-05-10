@@ -51,9 +51,9 @@
     - Setup FilterChain to authorize public endpoints (`/register`, `/login`)
 
 ## 📅 Day 12: Authentication APIs (Login)
-- [ ] 12.1 — Create `dto/LoginRequest.java` & `dto/AuthResponse.java`
-- [ ] 12.2 — Implement `login()` logic in `UserService` (AuthenticationManager)
-- [ ] 12.3 — Implement `AuthController.java` with `POST /register` and `POST /login`
+- [x] 12.1 — Create `dto/LoginRequest.java` & `dto/AuthResponse.java`
+- [x] 12.2 — Implement `login()` logic in `UserService` (AuthenticationManager)
+- [x] 12.3 — Implement `AuthController.java` with `POST /register` and `POST /login`
 
 ## 📅 Day 13: Token Validation & Internal Endpoints
 - [ ] 13.1 — Implement `GET /api/v1/auth/validate` for API Gateway use
