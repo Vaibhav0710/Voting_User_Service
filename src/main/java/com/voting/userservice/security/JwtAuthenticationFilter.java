@@ -7,20 +7,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.UUID;
 
 /**
  * JWT Authentication Filter that intercepts every HTTP request.
  * <p>
  * This filter extracts the JWT from the Authorization header, validates it,
  * and sets the authenticated user in the Spring Security context.
+ * It operates statelessly without hitting the database.
  * </p>
  */
 @Component
@@ -28,7 +30,6 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -52,14 +53,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             
             // If we found a username in the token and there is no authentication in the context yet
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
+                
                 // If token is valid, set the authentication context
-                if (jwtService.isTokenValid(jwt, userDetails.getUsername())) {
+                if (jwtService.isTokenValid(jwt, username)) {
+                    UUID userId = jwtService.extractUserId(jwt);
+                    String role = jwtService.extractRole(jwt);
+                    
+                    JwtPrincipal principal = new JwtPrincipal(userId, username, role);
+                    
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
+                            principal,
                             null,
-                            userDetails.getAuthorities()
+                            Collections.singletonList(new SimpleGrantedAuthority(role))
                     );
                     authToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)

@@ -56,9 +56,9 @@
 - [x] 12.3 — Implement `AuthController.java` with `POST /register` and `POST /login`
 
 ## 📅 Day 13: Token Validation & Internal Endpoints
-- [ ] 13.1 — Implement `GET /api/v1/auth/validate` for API Gateway use
-- [ ] 13.2 — Implement `GET /api/v1/users/{id}/role` for Voting Service use
-- [ ] 13.3 — Wrap all responses in `ApiResponse<T>`
+- [x] 13.1 — Implement `GET /api/v1/auth/validate` for API Gateway use
+- [~] 13.2 — [CANCELED] Implement `GET /api/v1/users/{id}/role` for Voting Service use (using HTTP headers instead)
+- [x] 13.3 — Wrap all responses in `ApiResponse<T>`
 
 ## 📅 Day 14: Unit Testing (Mocking)
 - [ ] 14.1 — Test `UserService.registerUser()` (Happy path + Conflict)
@@ -79,3 +79,5 @@
 | **Password Hashing** | BCrypt | Industry standard for secure storage |
 | **User ID** | UUID | Prevents ID enumeration attacks |
 | **Role Enforcement** | `hasRole('ADMIN')` | Standard Spring Security approach |
+| **Token Validation** | Purely Stateless | `JwtAuthenticationFilter` reads claims directly; zero DB calls to avoid microservice bottlenecks |
+| **Cross-Service Roles** | HTTP Headers | Gateway passes `X-User-Role` to avoid Feign network hop for role verification |

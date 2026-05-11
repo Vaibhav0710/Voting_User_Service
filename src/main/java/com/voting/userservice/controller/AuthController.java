@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,5 +35,24 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse authResponse = userService.login(request);
         return ResponseEntity.ok(ApiResponse.success(authResponse, "Login successful"));
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<ApiResponse<com.voting.userservice.dto.AuthValidationResponse>> validate(
+            org.springframework.security.core.Authentication authentication) {
+
+        // At this point, the JwtAuthenticationFilter has already validated the token
+        // and populated the Authentication object with our JwtPrincipal.
+        com.voting.userservice.security.JwtPrincipal principal = (com.voting.userservice.security.JwtPrincipal) authentication
+                .getPrincipal();
+
+        com.voting.userservice.dto.AuthValidationResponse validationResponse = com.voting.userservice.dto.AuthValidationResponse
+                .builder()
+                .userId(principal.getUserId())
+                .username(principal.getUsername())
+                .role(principal.getRole())
+                .build();
+
+        return ResponseEntity.ok(ApiResponse.success(validationResponse, "Token is valid"));
     }
 }
