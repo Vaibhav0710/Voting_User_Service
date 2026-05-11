@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Authentication and authorization endpoints.
+ * Handles user registration, login, and token validation.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -23,6 +27,12 @@ public class AuthController {
 
     private final IUserService userService;
 
+    /**
+     * Registers a new user.
+     *
+     * @param request the registration details
+     * @return the created user profile
+     */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserResponseDTO>> register(@Valid @RequestBody RegisterRequest request) {
         UserResponseDTO registeredUser = userService.registerUser(request);
@@ -31,12 +41,25 @@ public class AuthController {
                 .body(ApiResponse.success(registeredUser, "User registered successfully"));
     }
 
+    /**
+     * Authenticates a user and generates a JWT.
+     *
+     * @param request the login credentials
+     * @return the authentication token and user details
+     */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse authResponse = userService.login(request);
         return ResponseEntity.ok(ApiResponse.success(authResponse, "Login successful"));
     }
 
+    /**
+     * Internal endpoint to validate an existing JWT.
+     * Primarily used by the API Gateway to verify identity before routing to other services.
+     *
+     * @param authentication automatically resolved from SecurityContext
+     * @return the extracted user context (ID, username, role)
+     */
     @GetMapping("/validate")
     public ResponseEntity<ApiResponse<com.voting.userservice.dto.AuthValidationResponse>> validate(
             org.springframework.security.core.Authentication authentication) {

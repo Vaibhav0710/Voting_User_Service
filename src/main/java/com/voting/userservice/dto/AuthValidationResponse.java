@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * DTO returned by the token validation endpoint.
+ * Contains core user identity and authorization context extracted from the JWT.
+ */
 @Data
 @Builder
 @AllArgsConstructor

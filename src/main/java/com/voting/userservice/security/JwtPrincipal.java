@@ -5,6 +5,10 @@ import lombok.Getter;
 
 import java.util.UUID;
 
+/**
+ * Custom principal object used in the SecurityContext.
+ * Encapsulates user identity details extracted from a verified JWT token.
+ */
 @Getter
 @AllArgsConstructor
 public class JwtPrincipal {

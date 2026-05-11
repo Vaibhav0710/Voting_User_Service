@@ -1,7 +1,7 @@
 # 📋 User Service — Day-Wise Implementation Plan
 
 > **Goal:** Build the identity and authentication layer for the Online Voting System.  
-> **Status:** ✅ Day 10 — Completed (JWT Foundation)
+> **Status:** ✅ Day 15 — Completed (Testing & Cleanup)
 
 ---
 
@@ -61,14 +61,14 @@
 - [x] 13.3 — Wrap all responses in `ApiResponse<T>`
 
 ## 📅 Day 14: Unit Testing (Mocking)
-- [ ] 14.1 — Test `UserService.registerUser()` (Happy path + Conflict)
-- [ ] 14.2 — Test `UserService.login()` (Valid vs Invalid credentials)
-- [ ] 14.3 — Test `JwtService` token parsing logic
+- [x] 14.1 — Test `UserService.registerUser()` (Happy path + Conflict)
+- [x] 14.2 — Test `UserService.login()` (Valid vs Invalid credentials)
+- [x] 14.3 — Test `JwtService` token parsing logic
 
 ## 📅 Day 15: Integration Testing & Cleanup
-- [ ] 15.1 — Test Auth flow using `@WebMvcTest` and `MockMvc`
-- [ ] 15.2 — Verify full Register → Login → Validate loop
-- [ ] 15.3 — Cleanup imports, add Javadoc, and final code review
+- [x] 15.1 — Test Auth flow using `@WebMvcTest` and `MockMvc`
+- [x] 15.2 — Verify full Register → Login → Validate loop
+- [x] 15.3 — Cleanup imports, add Javadoc, and final code review
 
 ---
 
