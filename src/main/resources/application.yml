@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: user-service
-  
+
   datasource:
     url: ${VOTING_DB_URL}/userservice_db
     username: ${VOTING_DB_USER}
@@ -24,7 +24,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    enabled: false # Set to true once Eureka Server is running
+    enabled: true
 
 management:
   endpoints:
@@ -39,4 +39,4 @@ management:
 # ─────────────────────────────────────────────────────────────────────
 jwt:
   secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:86400000}
+  expiration: ${JWT_EXPIRATION}
