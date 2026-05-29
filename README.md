@@ -21,10 +21,10 @@ The **User Service** is the central identity provider for the voting system. It 
 - ✅ JWT token generation and validation
 - ✅ Role-based Access Control (RBAC) foundation
 - ✅ Global Exception Handling
-- 🔜 Login API & Auth Controller
-- 🔜 Token validation endpoint for API Gateway
-- 🔜 Swagger/OpenAPI documentation
-- 🔜 Unit + Integration tests
+- ✅ Login API & Auth Controller
+- ✅ Token validation endpoint for API Gateway
+- ✅ Swagger/OpenAPI documentation
+- ✅ Unit + Integration tests
 
 ---
 
@@ -182,10 +182,10 @@ user-service/
 | 9 | User Registration Logic | ✅ Done |
 | 10 | JWT Foundation | ✅ Done |
 | 11 | Spring Security Configuration | ✅ Done |
-| 12 | Authentication APIs (Login) | 🔜 Next |
-| 13 | Token Validation & Internal Endpoints | 🔜 Planned |
-| 14 | Unit Testing | 🔜 Planned |
-| 15 | Integration Testing | 🔜 Planned |
+| 12 | Authentication APIs (Login) | ✅ Done |
+| 13 | Token Validation & Internal Endpoints | ✅ Done |
+| 14 | Unit Testing | ✅ Done |
+| 15 | Integration Testing | ✅ Done |
 
 ---
 
@@ -193,10 +193,12 @@ user-service/
 
 | Service | Port | Description | Status |
 |---------|------|-------------|--------|
-| **User Service** | **8081** | **Authentication & Roles** | **🟡 In Progress** |
+| **User Service** | **8081** | **Authentication & Roles** | **✅ Complete** |
 | Candidate Service | 8082 | Candidate lifecycle | ✅ Complete |
-| Voting Service | 8083 | Vote casting | 🔜 Planned |
-| Result Service | 8084 | Live aggregation | 🔜 Planned |
+| Voting Service | 8083 | Vote casting | ✅ Complete |
+| Result Service | 8084 | Live aggregation | ✅ Complete |
+| API Gateway | 8080 | Routing, rate limiting | ✅ Complete |
+| Eureka Server | 8761 | Service discovery | ✅ Complete |
 
 ---
 
@@ -207,4 +209,4 @@ This project is licensed under the MIT License.
 ---
 
 > **Maintainer:** Vaibhav Jain  
-> **Last Updated:** May 4, 2026
+> **Last Updated:** May 29, 2026
