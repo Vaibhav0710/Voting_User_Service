@@ -4,6 +4,7 @@ import com.voting.userservice.dto.RegisterRequest;
 import com.voting.userservice.dto.UserResponseDTO;
 import com.voting.userservice.dto.LoginRequest;
 import com.voting.userservice.dto.AuthResponse;
+import com.voting.userservice.dto.UserRoleResponse;
 import com.voting.userservice.exception.DuplicateResourceException;
 import com.voting.userservice.exception.ResourceNotFoundException;
 import com.voting.userservice.mapper.UserMapper;
@@ -17,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 /**
  * Core implementation of user business operations.
@@ -113,6 +116,23 @@ public class UserServiceImpl implements IUserService {
      * is the standard UX pattern.
      * </p>
      */
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponseDTO getUser(UUID id) {
+        return userMapper.toResponseDTO(findUser(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserRoleResponse getRole(UUID id) {
+        return new UserRoleResponse(id, findUser(id).getRole().name());
+    }
+
+    private User findUser(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+    }
+
     private void validateUniqueness(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new DuplicateResourceException(

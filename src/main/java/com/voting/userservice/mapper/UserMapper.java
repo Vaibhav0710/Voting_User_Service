@@ -3,6 +3,7 @@ package com.voting.userservice.mapper;
 import com.voting.userservice.dto.RegisterRequest;
 import com.voting.userservice.dto.UserResponseDTO;
 import com.voting.userservice.model.User;
+import com.voting.userservice.model.enums.Role;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,13 +26,13 @@ public class UserMapper {
      * </p>
      *
      * @param request the registration request DTO
-     * @return a partially-built User entity (password not set)
+     * @return a partially-built User entity (password not set; role always ROLE_VOTER)
      */
     public User toEntity(RegisterRequest request) {
         return User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .role(request.getRole())
+                .role(Role.ROLE_VOTER)
                 // password deliberately omitted — set by service after hashing
                 .build();
     }

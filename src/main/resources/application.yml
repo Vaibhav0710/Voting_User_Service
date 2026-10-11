@@ -40,3 +40,9 @@ management:
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
+
+# ─── Bootstrap administrator (created once at startup when all three are set) ───
+admin:
+  username: ${ADMIN_USERNAME:}
+  email: ${ADMIN_EMAIL:}
+  password: ${ADMIN_PASSWORD:}

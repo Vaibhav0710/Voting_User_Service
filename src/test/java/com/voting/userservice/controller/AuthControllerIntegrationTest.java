@@ -44,7 +44,6 @@ class AuthControllerIntegrationTest {
         registerRequest.setUsername("testuser");
         registerRequest.setEmail("test@example.com");
         registerRequest.setPassword("password123");
-        registerRequest.setRole(Role.ROLE_VOTER);
 
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +85,6 @@ class AuthControllerIntegrationTest {
         request.setUsername("testuser");
         request.setEmail("test@example.com");
         request.setPassword("password123");
-        request.setRole(Role.ROLE_VOTER);
 
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -98,7 +96,6 @@ class AuthControllerIntegrationTest {
         duplicateRequest.setUsername("testuser");
         duplicateRequest.setEmail("other@example.com");
         duplicateRequest.setPassword("password123");
-        duplicateRequest.setRole(Role.ROLE_VOTER);
 
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -119,8 +116,26 @@ class AuthControllerIntegrationTest {
     }
 
     @Test
-    void validate_ShouldFail_WhenTokenIsMissing() throws Exception {
+    void register_IgnoresRequestedAdminRole_AndCreatesVoter() throws Exception {
+        String body = "{\"username\":\"sneaky\",\"email\":\"sneaky@example.com\","
+                + "\"password\":\"password123\",\"role\":\"ROLE_ADMIN\"}";
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data.role", is(Role.ROLE_VOTER.name())));
+    }
+
+    @Test
+    void validate_ShouldReturn401_WhenTokenIsInvalid() throws Exception {
+        mockMvc.perform(get("/api/v1/auth/validate").header("Authorization", "Bearer not-a-jwt"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void validate_ShouldReturn401_WhenTokenIsMissing() throws Exception {
         mockMvc.perform(get("/api/v1/auth/validate"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
