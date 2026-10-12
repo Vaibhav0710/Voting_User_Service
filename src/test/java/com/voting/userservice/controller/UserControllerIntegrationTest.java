@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 class UserControllerIntegrationTest {
 
@@ -81,6 +83,12 @@ class UserControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/users/{id}/role", admin.getId()).header("Authorization", bearer(voter)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.role").value("ROLE_ADMIN"));
+    }
+
+    @Test
+    void unknownPath_is404_not500() throws Exception {
+        mockMvc.perform(get("/api/v1/does-not-exist").header("Authorization", bearer(admin)))
+                .andExpect(status().isNotFound());
     }
 
     @Test

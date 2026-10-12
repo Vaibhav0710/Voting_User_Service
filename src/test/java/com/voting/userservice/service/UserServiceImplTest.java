@@ -1,5 +1,6 @@
 package com.voting.userservice.service;
 
+import com.voting.userservice.audit.AuditLogger;
 import com.voting.userservice.dto.AuthResponse;
 import com.voting.userservice.dto.LoginRequest;
 import com.voting.userservice.dto.RegisterRequest;
@@ -32,6 +33,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
+    @Mock
+    private AuditLogger auditLogger;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -90,6 +93,7 @@ class UserServiceImplTest {
         assertNotNull(result);
         assertEquals(userResponseDTO.getUsername(), result.getUsername());
         verify(userRepository).save(any(User.class));
+        verify(auditLogger).record("USER_REGISTERED", "testuser", "user:" + user.getId(), "SUCCESS");
     }
 
     @Test
@@ -128,6 +132,7 @@ class UserServiceImplTest {
         assertEquals("test_token", result.getToken());
         assertEquals("testuser", result.getUsername());
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        verify(auditLogger).record("LOGIN", "testuser", "user:" + user.getId(), "SUCCESS");
     }
 
     @Test
@@ -149,5 +154,6 @@ class UserServiceImplTest {
 
         // Act & Assert
         assertThrows(BadCredentialsException.class, () -> userService.login(loginRequest));
+        verify(auditLogger).record("LOGIN", "testuser", "user:unknown", "FAILURE");
     }
 }

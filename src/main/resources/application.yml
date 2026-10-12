@@ -14,16 +14,21 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
+  # prod = JSON logs; add "logstash" to also ship them to ELK
+  profiles:
+    group:
+      prod: json-logs
+
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
     enabled: true
 
 management:
@@ -31,6 +36,24 @@ management:
     web:
       exposure:
         include: health, prometheus, info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      # 0.0 locally: trace ids still appear in logs but nothing is exported; docker-compose sets 1.0
+      probability: ${TRACING_SAMPLING:0.0}
+  zipkin:
+    tracing:
+      endpoint: ${ZIPKIN_URL:http://localhost:9411/api/v2/spans}
+
+logging:
+  logstash:
+    destination: ${LOGSTASH_HOST:localhost}:${LOGSTASH_PORT:5000}
 
 # ─── JWT Configuration ───────────────────────────────────────────────
 # SECRET: Must be a Base64-encoded string, minimum 256 bits for HS256.

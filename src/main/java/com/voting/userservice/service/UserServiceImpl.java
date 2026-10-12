@@ -1,5 +1,6 @@
 package com.voting.userservice.service;
 
+import com.voting.userservice.audit.AuditLogger;
 import com.voting.userservice.dto.RegisterRequest;
 import com.voting.userservice.dto.UserResponseDTO;
 import com.voting.userservice.dto.LoginRequest;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final AuditLogger auditLogger;
 
     /**
      * Registers a new user with the following guarantees:
@@ -72,6 +75,7 @@ public class UserServiceImpl implements IUserService {
         // --- Step 4: Persist ---
         User savedUser = userRepository.save(user);
         log.info("User registered successfully: username={}, id={}", savedUser.getUsername(), savedUser.getId());
+        auditLogger.record("USER_REGISTERED", savedUser.getUsername(), "user:" + savedUser.getId(), "SUCCESS");
 
         // --- Step 5: Map Entity → Response DTO (password excluded) ---
         return userMapper.toResponseDTO(savedUser);
@@ -80,12 +84,18 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(readOnly = true)
     public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsernameOrEmail(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            // The attempted name is recorded so brute-force attempts are visible; the password never is.
+            auditLogger.record("LOGIN", request.getUsernameOrEmail(), "user:unknown", "FAILURE");
+            throw e;
+        }
 
         User user = userRepository
                 .findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
@@ -98,6 +108,7 @@ public class UserServiceImpl implements IUserService {
         );
 
         log.info("User authenticated successfully: username={}, id={}", user.getUsername(), user.getId());
+        auditLogger.record("LOGIN", user.getUsername(), "user:" + user.getId(), "SUCCESS");
 
         return AuthResponse.builder()
                 .token(token)

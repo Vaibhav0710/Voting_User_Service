@@ -3,11 +3,13 @@ package com.voting.userservice.exception;
 import com.voting.userservice.dto.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -61,7 +63,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<String>> handleGlobalException(Exception ex) {
+        if (ex instanceof ErrorResponse springWebError) {
+            // Spring's own client errors (unknown path 404, wrong method 405, …) keep their status
+            HttpStatusCode status = springWebError.getStatusCode();
+            return new ResponseEntity<>(ApiResponse.error(reasonPhrase(status)), status);
+        }
         log.error("Unhandled exception", ex);
         return new ResponseEntity<>(ApiResponse.error("An unexpected internal server error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private static String reasonPhrase(HttpStatusCode status) {
+        HttpStatus known = HttpStatus.resolve(status.value());
+        return known == null ? "Request failed" : known.getReasonPhrase();
     }
 }
